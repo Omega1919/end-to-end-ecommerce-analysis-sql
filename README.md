@@ -14,23 +14,41 @@ This project analyzes e-commerce transaction data to evaluate business performan
 ```sql
 SELECT SUM(cl_price) AS total_revenue
 FROM us_order_1;
-Result
-$1,829,230.6
+```
 
-Insight
-Total revenue of $1.83M represents overall business performance. However, without a benchmark or prior comparison, this alone does not fully indicate growth or decline.
-Revenue by Year
-Query
-SQL
+### Result
+$1,829,230.6  
+
+### Insight
+Total revenue of **$1.83M** represents overall business performance.
+
+---
+
+## Revenue by Year
+
+### Query
+```sql
 SELECT year, SUM(cl_price) AS total_revenue
 FROM us_order_1
 GROUP BY year
 ORDER BY year;
-Insight
-Revenue increased significantly from 2012 to 2014, peaking at over $1M in 2014. However, there was a sharp decline in 2015, indicating a potential drop in business performance that requires further investigation.
-Year-over-Year Growth
-Query
-SQL
+```
+
+### Result
+2012 — $120,375  
+2013 — $375,655  
+2014 — $1,008,698  
+2015 — $324,500  
+
+### Insight
+Revenue increased significantly from 2012 to 2014, peaking in 2014, before declining sharply in 2015.
+
+---
+
+## Year-over-Year Growth
+
+### Query
+```sql
 SELECT 
     year,
     SUM(cl_price) AS revenue,
@@ -40,51 +58,106 @@ SELECT
 FROM us_order_1
 GROUP BY year
 ORDER BY year;
-Insight
-Year-over-year growth analysis reveals rapid expansion between 2012 and 2014, with revenue growing by 212% in 2013 and 168% in 2014. However, this growth was not sustained, as revenue declined sharply by 67% in 2015, suggesting a significant drop in demand or business activity after the 2014 peak.
-💸 Profitability Analysis
-Total Profit by Year
-Query
-SQL
+```
+
+### Result
+2012 — NULL  
+2013 — 212%  
+2014 — 168%  
+2015 — -67%  
+
+### Insight
+Revenue grew rapidly between 2012 and 2014, then declined significantly in 2015.
+
+---
+
+# 💸 Profitability Analysis
+
+## Total Profit by Year
+
+### Query
+```sql
 SELECT year, SUM(cl_profit) AS total_profit
 FROM us_order_1
 GROUP BY year
 ORDER BY year;
-Insight
-Profit followed a similar trend to revenue, increasing from 2012 to 2014 before declining in 2015. This indicates that changes in revenue directly impacted overall profitability.
-Profit Margin
-Query
-SQL
+```
+
+### Result
+2012 — $73,444  
+2013 — $230,794  
+2014 — $637,235  
+2015 — $205,807  
+
+### Insight
+Profit followed the same trend as revenue, increasing until 2014 and declining in 2015.
+
+---
+
+## Profit Margin
+
+### Query
+```sql
 SELECT 
     year,
     SUM(cl_profit) / SUM(cl_price) * 100 AS profit_margin
 FROM us_order_1
 GROUP BY year
 ORDER BY year;
-Insight
-Profit margins remained stable between 61% and 63% across all years, indicating consistent cost efficiency despite fluctuations in revenue and profit.
-👥 Customer Analysis
-Total Customers
-Query
-SQL
+```
+
+### Result
+2012 — 61%  
+2013 — 61%  
+2014 — 63%  
+2015 — 63%  
+
+### Insight
+Profit margins remained stable, indicating consistent cost efficiency.
+
+---
+
+# 👥 Customer Analysis
+
+## Total Customers
+
+### Query
+```sql
 SELECT COUNT(DISTINCT user_id) AS total_customers
 FROM us_order_1;
-Result
-30,040
-Insight
-The business has a large customer base of over 30,000 customers, but this does not necessarily indicate strong customer retention.
-Customer Retention
-Query
-SQL
+```
+
+### Result
+30,040  
+
+### Insight
+The business has a large customer base but does not necessarily reflect strong retention.
+
+---
+
+## Customer Retention
+
+### Query
+```sql
 SELECT 
     COUNT(CASE WHEN is_primary_item = 1 THEN 1 END) AS primary_orders,
     COUNT(CASE WHEN is_primary_item = 0 THEN 1 END) AS secondary_orders
 FROM order_items;
-Insight
-Most customers appear to make only one purchase, even when buying multiple items within a single order. This indicates low customer retention and limited repeat purchasing behavior.
-Top 10 Customers Contribution
-Query
-SQL
+```
+
+### Result
+Primary Orders — 32,313  
+Secondary Orders — 7,712  
+
+### Insight
+Most customers make only one purchase, indicating low retention.
+
+---
+
+## Top 10 Customers Contribution
+
+### Query
+```sql
 SELECT SUM(total_revenue) 
 FROM (
     SELECT user_id, SUM(cl_price) AS total_revenue
@@ -93,52 +166,90 @@ FROM (
     ORDER BY total_revenue DESC
     LIMIT 10
 ) bb;
-Result
-$2,203.56
-Insight
-Revenue contribution from the top 10 customers is extremely low compared to total revenue, indicating that revenue is widely distributed across customers rather than concentrated among a few high-value buyers.
-📦 Order Analysis
-Total Orders
-Query
-SQL
+```
+
+### Result
+$2,203.56  
+
+### Insight
+Revenue is widely distributed, with little contribution from top customers.
+
+---
+
+# 📦 Order Analysis
+
+## Total Orders
+
+### Query
+```sql
 SELECT COUNT(order_item_id) AS total_orders
 FROM s_order;
-Result
-37,739
-Insight
-The number of orders is relatively close to the number of customers, further confirming that most customers place only one order.
-Average Order Value (AOV)
-Query
-SQL
+```
+
+### Result
+37,739  
+
+### Insight
+Most customers place only one order.
+
+---
+
+## Average Order Value (AOV)
+
+### Query
+```sql
 SELECT AVG(price_usd) AS AOV
 FROM order_items;
-Result
-48.4
-Insight
-The average order value of $48.4 reflects typical customer spending per transaction. However, inclusion of refunded items may slightly affect this value.
-🔁 Refund Analysis
-Total Refund Orders
-Query
-SQL
+```
+
+### Result
+48.4  
+
+### Insight
+Average customer spending per order is $48.4.
+
+---
+
+# 🔁 Refund Analysis
+
+## Total Refund Orders
+
+### Query
+```sql
 SELECT COUNT(order_item_refund_id) AS total_refund_orders
 FROM order_item_refunds;
-Result
-1,731
-Insight
-Refunds account for approximately 4.32% of total orders, representing a moderate return rate that may impact profitability.
-Total Refund Loss
-Query
-SQL
+```
+
+### Result
+1,731  
+
+### Insight
+Refund rate is moderate and impacts revenue.
+
+---
+
+## Total Refund Loss
+
+### Query
+```sql
 SELECT SUM(refund_amount_usd) AS total_loss
 FROM order_item_refunds;
-Result
-$85,338.69
-Insight
-Refunds resulted in a total loss of over $85K, highlighting a noticeable reduction in revenue due to returned items.
-🛍️ Product Analysis
-Product Performance
-Query
-SQL
+```
+
+### Result
+$85,338.69  
+
+### Insight
+Refunds caused a significant revenue loss.
+
+---
+
+# 🛍️ Product Analysis
+
+## Product Performance
+
+### Query
+```sql
 SELECT 
     product_name, 
     SUM(cl_price) AS total_revenue,
@@ -146,11 +257,23 @@ SELECT
 FROM us_order_1
 GROUP BY product_name
 ORDER BY total_revenue DESC;
-Insight
-The Original Mr. Fuzzy is the top-performing product, generating over $1.14M in revenue and the highest number of orders. In contrast, the Hudson River Mini Bear generates the lowest revenue despite having a relatively high order count, indicating a lower price point.
-Product Contribution
-Query
-SQL
+```
+
+### Result
+The Original Mr. Fuzzy — $1,141,071 — 22,826  
+The Forever Mini Bear — $335,284 — 5,589  
+The Birthday Sugar Panda — $210,542 — 4,578  
+The Hudson River Mini Bear — $142,332 — 4,746  
+
+### Insight
+The Original Mr. Fuzzy dominates both revenue and order volume.
+
+---
+
+## Product Contribution
+
+### Query
+```sql
 SELECT 
     product_name,
     SUM(cl_price) AS total_revenue,
@@ -158,14 +281,29 @@ SELECT
 FROM us_order_1
 GROUP BY product_name
 ORDER BY product_contribution DESC;
-Insight
-Revenue is highly concentrated in a single product, with The Original Mr. Fuzzy contributing approximately 62% of total revenue. This indicates a strong dependency on one product, which poses a potential business risk if demand declines.
-🔥 Key Findings
-Revenue and profit grew rapidly between 2012 and 2014 but declined sharply in 2015
-Profit margins remained stable, indicating consistent operational efficiency
-Customer retention is low, with most customers making only one purchase
-Revenue is highly dependent on a single product
-Refunds contribute to noticeable revenue loss
-Revenue is widely distributed across customers
-📌 Conclusion
-The business experienced strong growth followed by a significant decline, suggesting potential issues in sustaining performance. While operational efficiency remains stable, key challenges include low customer retention and high dependency on a single product. Addressing these areas could improve long-term business stability and growth.
+```
+
+### Result
+The Original Mr. Fuzzy — 62.2%  
+The Forever Mini Bear — 18.3%  
+The Birthday Sugar Panda — 11.5%  
+The Hudson River Mini Bear — 8%  
+
+### Insight
+Revenue is highly concentrated in one product, creating dependency risk.
+
+---
+
+# 🔥 Key Findings
+
+- Strong growth until 2014, followed by decline in 2015  
+- Stable profit margins despite revenue changes  
+- Low customer retention  
+- High dependency on a single product  
+- Refunds reduce overall revenue  
+
+---
+
+# 📌 Conclusion
+
+The business shows strong growth potential but faces challenges in customer retention and product dependency. Addressing these issues can improve long-term stability.
