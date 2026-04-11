@@ -1,3 +1,8 @@
+## 📂 Dataset
+This dataset contains e-commerce transaction records including customer information, product details, revenue, and profit metrics. It was used to analyze business performance across multiple dimensions such as sales trends, customer behavior, and product contribution.
+
+
+
 # 📊 E-Commerce Data Analysis Report
 
 ## 🧾 Overview
@@ -307,3 +312,6 @@ Revenue is highly concentrated in one product, creating dependency risk.
 # 📌 Conclusion
 
 The business shows strong growth potential but faces challenges in customer retention and product dependency. Addressing these issues can improve long-term stability.
+
+
+
