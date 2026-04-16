@@ -313,5 +313,8 @@ Revenue is highly concentrated in one product, creating dependency risk.
 
 The business shows strong growth potential but faces challenges in customer retention and product dependency. Addressing these issues can improve long-term stability.
 
+# 📊 Dashboard
 
+[View Interactive Dashboard](https://datastudio.google.com/reporting/23fe2dfd-1216-4a25-bc48-96980879448c)
 
+[View Interactive Dashboard Image](end-end_dashboard.png)
